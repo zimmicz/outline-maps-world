@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "leaflet": "^1.0.1",
+    "normalize.css": "^5.0.0"
+  },
+  "name": "blind-maps",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/zimmicz/blind-maps.git",
+    "type": "git"
+  },
+  "author": "Michal Zimmermann <zimmicz@gmail.com>",
+  "license": "MIT"
+}
