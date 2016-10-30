@@ -1,0 +1,75 @@
+html,
+body {
+    height: 100%;
+}
+
+#map {
+    height: 100%;
+}
+
+.bm-timer,
+.bm-result,
+.bm-answer {
+    background: white;
+    text-align: center;
+    width: 200px;
+}
+
+.bm-result {
+    margin-top: 0 !important;
+}
+
+.bm-result ul {
+    list-style: none;
+    text-align: left;
+    margin: 0;
+    padding-left: 10px;
+}
+
+.bm-result ul li {
+    border-bottom: 1px dotted rgba(0,0,0,0.16);
+    line-height: 28px;
+}
+
+.bm-result span,
+.bm-result strong {
+    display: inline-block;
+    width:80px;
+}
+
+.bm-result strong {
+    text-align: right;
+}
+
+.bm-timer h1 {
+    border-bottom: 1px solid rgba(0,0,0,0.16);
+    border-top: 1px solid rgba(0,0,0,0.16);
+    margin-left: 10px;
+}
+
+.leaflet-top.leaflet-right {
+    background: #fff;
+    border-radius: 2px;
+    display: inline-block;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.bm-answer {
+    margin-top: 25px !important;
+    padding-bottom: 25px;
+}
+
+.bm-answer input {
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.16);
+    font-size: 16px;
+    width: 170px;
+}
+
+.bm-answer input:focus {
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,1);
+    outline: none;
+}

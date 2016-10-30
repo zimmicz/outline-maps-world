@@ -1,0 +1,6 @@
+node_modules/*
+!node_modules/leaflet/
+node_modules/leaflet/*
+!node_modules/leaflet/dist/
+
+!node_modules/normalize.css/
