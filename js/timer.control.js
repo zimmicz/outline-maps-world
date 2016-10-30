@@ -19,7 +19,7 @@ L.Control.Timer = L.Control.extend({
         if (this.options.timeout) {
             setTimeout(function() {
                 clearInterval(self.time);
-                if (typeof self.options.timeout === "function") {
+                if (typeof self.options.timeoutFn === "function") {
                     self.options.timeoutFn();
                 }
             }, this.options.timeout);

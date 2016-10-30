@@ -11,7 +11,7 @@ L.Control.Answer = L.Control.extend({
         let container = L.DomUtil.create("div", "bm-answer");
         this.input = L.DomUtil.create("input", "", container);
         this.input.id = "bm-answer-input";
-        this.input.placeholder = "Select any map feature";
+        this.input.placeholder = "Type the name...";
 
         L.DomEvent.disableClickPropagation(container);
         L.DomEvent.disableScrollPropagation(container);

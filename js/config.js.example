@@ -10,7 +10,7 @@ let config = {
         selected: "yellow"
     },
     timer: {
-        position: "topright", // or boolean
-        timeout: 5000 // milliseconds - set -1 for infinity
+        position: "topright", // or false
+        timeout: 0 // milliseconds
     }
 };

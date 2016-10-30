@@ -1,4 +1,4 @@
-let current; // placeholder for the currently selected feature
+let _layers = [];
 
 loadData()
     .then(init)
@@ -29,18 +29,17 @@ function loadData() {
 }
 
 
+/**
+ * Initializes the game.
+ * @return {void}
+ */
 function init() {
     let map = L.map("map");
     let resultControl = L.control.result();
-    let timerControl = L.control.timer({
-        position: config.timer.position,
-        timeout: config.timer.timeout
-    });
-    let answerControl = L.control.answer({
-        onValidate: _checkAnswer
-    });
+    let timerControl = L.control.timer({position: config.timer.position});
+    let answerControl = L.control.answer({onValidate: _checkAnswer});
 
-    let firstFeature;
+    let isFirstLoaded = false;
 
     timerControl.addTo(map);
     resultControl.addTo(map);
@@ -50,34 +49,47 @@ function init() {
 
     let layer = L.geoJSON(data, {
         style: (feature) => {
-            return {
-                color: config.colors.current,
+            let style = {
                 fill: true,
-                fillColor: config.colors.current,
                 fillOpacity: 0.3,
                 weight: 1
             };
+
+            if (!isFirstLoaded) {
+                isFirstLoaded = true; // add first item
+                style.color = style.fillColor = config.colors.selected;
+            } else {
+                style.color = style.fillColor = config.colors.default;
+            }
+
+            return style;
         },
-        onEachFeature: _onEachFeature.bind(null, resultControl)
+        onEachFeature: _onEachFeature
     });
 
     _addBasemap(map);
     layer.addTo(map);
     map.fitBounds(layer.getBounds());
+    answerControl.focus();
 
-    L.DomEvent.on(L.DomUtil.get("bm-answer-input"), "keydown", _validate);
+    L.DomEvent.on(L.DomUtil.get("bm-answer-input"), "keydown", (e) => {
+        _validate(e);
+        _controlProgress(resultControl, timerControl);
+    });
 }
 
-function _onEachFeature(resultCtrl, feature, layer) {
+
+function _onEachFeature(feature, layer) {
+    _layers.push(layer);
     _addFeatureCheck(feature, layer);
+}
 
-    layer.on("click", (e) => {
-        let progress = resultCtrl.showProgress();
 
-        if (!progress.todo) {
-            timerControl.stopTime();
-        }
-    });
+function _controlProgress(resultCtrl, timerCtrl) {
+    let progress = resultCtrl.showProgress();
+    if (!progress.todo) {
+        timerCtrl.stopTime();
+    }
 }
 
 /**
@@ -89,53 +101,48 @@ function _onEachFeature(resultCtrl, feature, layer) {
 
 
 function _validate(e) {
-    if (e.keyCode !== 13) {
+    if (e.keyCode !== 13 || !_layers[0]) {
         return;
     }
 
-    let value = e.target.value;
-    let props = current.target.feature.properties;
-    let result = _checkAnswer(value, current.target.feature);
+    let answer = e.target.value;
+    let props = _layers[0].feature.properties;
+    let result = _checkAnswer(answer, _layers[0].feature);
 
-    current.target.setStyle({
+    _layers[0].setStyle({
         color: result ? config.colors.right : config.colors.wrong,
         fillColor: result ? config.colors.right : config.colors.wrong
     });
 
+
     if (!props.retries || result) { // you ran out of retries
-        current.target.clearAllEventListeners();
         props.done = true;
+
     }
 
     if (!props.retries && !result) {
-        current.target.clearAllEventListeners();
         props.done = false;
     }
+
+    _layers.shift();
+
+    if (_layers.length === 0) {
+        return;
+    }
+
+    _layers[0].setStyle({
+            color: config.colors.selected,
+            fillColor: config.colors.selected
+        });
+
+    L.DomUtil.get("bm-answer-input").focus();
+    L.DomUtil.get("bm-answer-input").value = "";
 }
+
 
 function _addFeatureCheck(feature, layer) {
     feature.properties.retries = config.retriesPerItem;
     feature.properties.done = null;
-
-    layer.on("click", (e) => {
-        L.DomUtil.get("bm-answer-input").focus();
-        L.DomUtil.get("bm-answer-input").placeholder = "Type the name...";
-        L.DomUtil.get("bm-answer-input").value = "";
-
-        if (current && current.target.feature.properties.done === null) {
-            current.target.setStyle({
-                color: config.colors.current,
-                fillColor: config.colors.current
-            });
-        }
-
-        current = e;
-
-        current.target.setStyle({
-            color: config.colors.selected,
-            fillColor: config.colors.selected
-        });
-    });
 }
 
 /**
