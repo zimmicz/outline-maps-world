@@ -69,11 +69,15 @@ function init() {
 
     _addBasemap(map);
     layer.addTo(map);
-    map.fitBounds(layer.getBounds());
+
+    map.fitBounds(_layers[0].getBounds(), {
+        maxZoom: 5
+    });
+
     answerControl.focus();
 
     L.DomEvent.on(L.DomUtil.get("bm-answer-input"), "keydown", (e) => {
-        _validate(e);
+        _validate(e, map);
         _controlProgress(resultControl, timerControl);
     });
 }
@@ -100,7 +104,7 @@ function _controlProgress(resultCtrl, timerCtrl) {
  */
 
 
-function _validate(e) {
+function _validate(e, map) {
     if (e.keyCode !== 13 || !_layers[0]) {
         return;
     }
@@ -134,6 +138,10 @@ function _validate(e) {
             color: config.colors.selected,
             fillColor: config.colors.selected
         });
+
+    map.flyToBounds(_layers[0].getBounds(), {
+        maxZoom: 5
+    });
 
     L.DomUtil.get("bm-answer-input").focus();
     L.DomUtil.get("bm-answer-input").value = "";
