@@ -37,11 +37,46 @@ function loadData() {
  */
 function welcome() {
     return new Promise((resolve, reject) => {
+        let welcome = document.getElementById("welcome");
+        if (_getSettings()) {
+            document.body.removeChild(welcome);
+            resolve("Let's play!");
+        }
+
+        welcome.style.display = "block";
         document.getElementById("play").addEventListener("click", (e) => {
-            document.body.removeChild(document.getElementById("welcome"));
+            _saveSettings();
+            document.body.removeChild(welcome);
             resolve("Let's play!");
         });
     });
+}
+
+
+function _getSettings() {
+    let storageKey = "remember" + (isInverse() ? "Inverse" : "");
+    return window.localStorage.getItem(storageKey);
+}
+
+
+function _saveSettings() {
+    let remember = document.getElementById("remember");
+    let storageKey = "remember" + (isInverse() ? "Inverse" : "");
+
+    remember.checked
+        ? window.localStorage.setItem(storageKey, true)
+        : window.localStorage.setItem(storageKey, false);
+}
+
+
+/**
+ * Decides what type of game the user is playing.
+ * True means we're guessing features by names.
+ * False means we're guessing names by features.
+ * @return {Boolean}
+ */
+function isInverse() {
+    return window.location.href.indexOf("inverse") > -1;
 }
 
 
@@ -53,13 +88,11 @@ function init() {
     let map = L.map("map");
     let resultControl = L.control.result();
     let timerControl = L.control.timer({position: config.timer.position});
-    let answerControl = L.control.answer({onValidate: _checkAnswer});
 
     let isFirstLoaded = false;
 
     timerControl.addTo(map);
     resultControl.addTo(map);
-    answerControl.addTo(map);
 
     data.features = _shuffle(data.features);
 
@@ -71,7 +104,7 @@ function init() {
                 weight: 1
             };
 
-            if (!isFirstLoaded) {
+            if (!isFirstLoaded && !isInverse()) {
                 isFirstLoaded = true; // add first item
                 style.color = style.fillColor = config.colors.selected;
             } else {
@@ -86,11 +119,20 @@ function init() {
     _addBasemap(map);
     layer.addTo(map);
 
-    map.fitBounds(_layers[0].getBounds(), {
-        maxZoom: 5
-    });
+    isInverse()
+        ? map.fitBounds(layer.getBounds())
+        : map.fitBounds(_layers[0].getBounds(), {maxZoom: 5});
 
+    let answerControl = L.control.answer({onValidate: _checkAnswer, inverse: isInverse(), layers: _layers});
+    answerControl.addTo(map);
     answerControl.focus();
+
+    if (isInverse()) {
+        map.on("click", (e) => {
+            _controlProgress(resultControl, timerControl);
+        });
+    }
+
 
     L.DomEvent.on(L.DomUtil.get("bm-answer-input"), "keydown", (e) => {
         _validate(e, map);
@@ -111,6 +153,10 @@ function _onEachFeature(feature, layer) {
     _layers.push(layer);
     _addTooltip(feature, layer);
     _addFeatureCheck(feature, layer);
+
+    if (isInverse()) {
+        layer.on("click", _validate);
+    }
 }
 
 
@@ -146,6 +192,7 @@ function _controlProgress(resultCtrl, timerCtrl) {
     }
 }
 
+
 /**
  * Provides mechanism to validate user input against the geoJSON properties
  * and act accordingly.
@@ -153,26 +200,26 @@ function _controlProgress(resultCtrl, timerCtrl) {
  * @param {object} layer
  */
 function _validate(e, map) {
-    if (e.keyCode !== 13 || !_layers[0]) {
+    if (!isInverse() && e.keyCode !== 13 || !_layers[0]) {
         return;
     }
 
-    let answer = e.target.value;
+    let answer = isInverse() ? e.target.feature.properties[config.field[0]] : e.target.value;
     let props = _layers[0].feature.properties;
-    let result = _checkAnswer(answer, _layers[0].feature);
+    let isRightAnswer = _checkAnswer(answer, _layers[0].feature);
 
     _layers[0].setStyle({
-        color: result ? config.colors.right : config.colors.wrong,
-        fillColor: result ? config.colors.right : config.colors.wrong
+        color: isRightAnswer ? config.colors.right : config.colors.wrong,
+        fillColor: isRightAnswer ? config.colors.right : config.colors.wrong
     });
 
 
-    if (!props.retries || result) { // you ran out of retries
+    if (!props.retries || isRightAnswer) { // you ran out of retries
         props.done = true;
 
     }
 
-    if (!props.retries && !result) {
+    if (!props.retries && !isRightAnswer) {
         props.done = false;
     }
 
@@ -182,17 +229,20 @@ function _validate(e, map) {
         return;
     }
 
-    _layers[0].setStyle({
-            color: config.colors.selected,
-            fillColor: config.colors.selected
-        });
+    if (!isInverse()) {
+        _layers[0].setStyle({
+                color: config.colors.selected,
+                fillColor: config.colors.selected
+            });
 
-    map.flyToBounds(_layers[0].getBounds(), {
-        maxZoom: 5
-    });
+        map.flyToBounds(_layers[0].getBounds(), {
+            maxZoom: 5
+        });
+    }
 
     L.DomUtil.get("bm-answer-input").focus();
     L.DomUtil.get("bm-answer-input").value = "";
+    L.DomUtil.get("bm-answer-input").innerHTML =_layers[0].feature.properties[config.field[0]];
 }
 
 
@@ -222,6 +272,7 @@ function _checkAnswer(value, feature) {
     return result;
 }
 
+
 /**
  * Decides whether to add basemap or not
  * @param {L.map} map
@@ -236,6 +287,7 @@ function _addBasemap(map) {
             maxZoom: 18
         }).addTo(map);
 }
+
 
 /**
  * Shuffles input data.

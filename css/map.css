@@ -10,6 +10,7 @@ body {
 }
 
 #welcome {
+    display: none;
     position: absolute;
     left: 0;
     right: 0;
@@ -37,6 +38,10 @@ body {
 #welcome div ul {
     font-size: 15px;
     line-height: 24px;
+}
+
+#welcome input+span {
+    padding-left: 10px;
 }
 
 #welcome button {
