@@ -1,6 +1,7 @@
 let _layers = [];
 
 loadData()
+    .then(welcome)
     .then(init)
     .catch((err) => {
         console.log(err);
@@ -25,6 +26,15 @@ function loadData() {
         });
 
         document.body.appendChild(s);
+    });
+}
+
+function welcome() {
+    return new Promise((resolve, reject) => {
+        document.getElementById("play").addEventListener("click", (e) => {
+            document.body.removeChild(document.getElementById("welcome"));
+            resolve("Let's play!");
+        });
     });
 }
 

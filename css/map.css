@@ -1,10 +1,61 @@
 html,
 body {
+    background: #bbb;
+    color: #444;
     height: 100%;
 }
 
 #map {
     height: 100%;
+}
+
+#welcome {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    z-index: 1000;
+}
+
+#welcome div {
+    padding: 15px;
+    width: 400px;
+}
+
+#welcome div h1,
+#welcome div h2 {
+    border-bottom: 1px solid #444;
+    color: #53777A;
+    font-weight: normal;
+    padding-bottom: 5px;
+}
+
+#welcome div p,
+#welcome div ul {
+    font-size: 15px;
+    line-height: 24px;
+}
+
+#welcome button {
+    border: 1px solid #072B2E;
+    background: #53777A;
+    color: white;
+    cursor: hand;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+    margin: auto;
+    padding: 8px;
+    text-transform: uppercase;
+    width: 400px;
+}
+
+#welcome button:hover {
+    border-color: #001114;
+    background: #3A5E61;
 }
 
 .bm-timer,
@@ -47,7 +98,8 @@ body {
     margin-left: 10px;
 }
 
-.leaflet-top.leaflet-right {
+.leaflet-top.leaflet-right,
+#welcome div {
     background: #fff;
     border-radius: 2px;
     display: inline-block;
