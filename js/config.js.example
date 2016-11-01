@@ -4,7 +4,7 @@ let config = {
     basemap: false,
     retriesPerItem: 2, // set to -1 for infinity
     colors: {
-        current: "#53777A",
+        default: "#53777A",
         right: "green",
         wrong: "red",
         selected: "yellow"
