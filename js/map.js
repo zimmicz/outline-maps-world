@@ -85,9 +85,26 @@ function init() {
 
 function _onEachFeature(feature, layer) {
     _layers.push(layer);
+    _addTooltip(feature, layer);
     _addFeatureCheck(feature, layer);
 }
 
+function _addTooltip(feature, layer) {
+    let content = ["<ul>"];
+
+    for (let field of config.field) {
+        content.push(`<li>${field}: <strong>${feature.properties[field]}</strong></li>`);
+    }
+
+    content.push("</ul>");
+
+    layer.bindTooltip(content.join(""));
+    layer.on("mouseover", (e) => {
+        if (_layers.length > 0) {
+            layer.closeTooltip();
+        }
+    });
+}
 
 function _controlProgress(resultCtrl, timerCtrl) {
     let progress = resultCtrl.showProgress();
