@@ -7,6 +7,7 @@ loadData()
         console.log(err);
     });
 
+
 /**
  * Loads GeoJSON data from config.path into data variable.
  * @return {Promise}
@@ -29,6 +30,11 @@ function loadData() {
     });
 }
 
+
+/**
+ * Shows welcome screen and waits for user to hit the start button.
+ * @return {Promise}
+ */
 function welcome() {
     return new Promise((resolve, reject) => {
         document.getElementById("play").addEventListener("click", (e) => {
@@ -93,12 +99,27 @@ function init() {
 }
 
 
+/**
+ * Stores features in the global array.
+ * Attaches tooltips to features.
+ * Adds answer checks to features.
+ * @param  {object} feature
+ * @param  {object} layer
+ * @return {void}
+ */
 function _onEachFeature(feature, layer) {
     _layers.push(layer);
     _addTooltip(feature, layer);
     _addFeatureCheck(feature, layer);
 }
 
+
+/**
+ * Adds tooltip to map features.
+ * Tooltip is only shown once all the features were answered.
+ * @param {object} feature
+ * @param {object} layer
+ */
 function _addTooltip(feature, layer) {
     let content = ["<ul>"];
 
@@ -109,12 +130,14 @@ function _addTooltip(feature, layer) {
     content.push("</ul>");
 
     layer.bindTooltip(content.join(""));
+    layer.off("click"); // keep tooltip hidden
     layer.on("mouseover", (e) => {
         if (_layers.length > 0) {
             layer.closeTooltip();
         }
     });
 }
+
 
 function _controlProgress(resultCtrl, timerCtrl) {
     let progress = resultCtrl.showProgress();
@@ -129,8 +152,6 @@ function _controlProgress(resultCtrl, timerCtrl) {
  * @param {object} feature
  * @param {object} layer
  */
-
-
 function _validate(e, map) {
     if (e.keyCode !== 13 || !_layers[0]) {
         return;
