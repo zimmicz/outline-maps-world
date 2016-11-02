@@ -1,0 +1,6 @@
+{
+  "name": "Blind maps",
+  "tagline": "Learn yourself some geography",
+  "body": "# Blind maps\r\n\r\nA little project for educational purposes.\r\n\r\nFeel free to contribute by sending more data.\r\n\r\n## How to contribute\r\n\r\nFork `gh-pages`, copy the `usa` folder to the new destination and provide new `data.js` file. Don't forget to prepend `let data = ` to the file. Send pull request and wait for it to be merged.\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}

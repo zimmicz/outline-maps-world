@@ -1,5 +1,5 @@
 let config = {
-    path: "../data/data.geojson",
+    path: "./data/data.js",
     field: ["name"], // attribute(s) to use for comparison
     basemap: false,
     retriesPerItem: 1, // set to -1 for infinity

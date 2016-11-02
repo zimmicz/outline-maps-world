@@ -1,10 +1,13 @@
 let _layers = [];
 
+
 loadData()
+    .then(welcome)
     .then(init)
     .catch((err) => {
         console.log(err);
     });
+
 
 /**
  * Loads GeoJSON data from config.path into data variable.
@@ -30,6 +33,55 @@ function loadData() {
 
 
 /**
+ * Shows welcome screen and waits for user to hit the start button.
+ * @return {Promise}
+ */
+function welcome() {
+    return new Promise((resolve, reject) => {
+        let welcome = document.getElementById("welcome");
+        if (_getSettings()) {
+            document.body.removeChild(welcome);
+            resolve("Let's play!");
+        }
+
+        welcome.style.display = "block";
+        document.getElementById("play").addEventListener("click", (e) => {
+            _saveSettings();
+            document.body.removeChild(welcome);
+            resolve("Let's play!");
+        });
+    });
+}
+
+
+function _getSettings() {
+    let storageKey = "remember" + (isInverse() ? "Inverse" : "");
+    return window.localStorage.getItem(storageKey);
+}
+
+
+function _saveSettings() {
+    let remember = document.getElementById("remember");
+    let storageKey = "remember" + (isInverse() ? "Inverse" : "");
+
+    remember.checked
+        ? window.localStorage.setItem(storageKey, true)
+        : window.localStorage.setItem(storageKey, false);
+}
+
+
+/**
+ * Decides what type of game the user is playing.
+ * True means we're guessing features by names.
+ * False means we're guessing names by features.
+ * @return {Boolean}
+ */
+function isInverse() {
+    return window.location.href.indexOf("inverse") > -1;
+}
+
+
+/**
  * Initializes the game.
  * @return {void}
  */
@@ -37,51 +89,137 @@ function init() {
     let map = L.map("map");
     let resultControl = L.control.result();
     let timerControl = L.control.timer({position: config.timer.position});
-    let answerControl = L.control.answer({onValidate: _checkAnswer});
 
     let isFirstLoaded = false;
 
     timerControl.addTo(map);
     resultControl.addTo(map);
-    answerControl.addTo(map);
 
     data.features = _shuffle(data.features);
 
     let layer = L.geoJSON(data, {
         style: (feature) => {
-            let style = {
+            let _style = {
                 fill: true,
                 fillOpacity: 0.3,
                 weight: 1
             };
 
-            if (!isFirstLoaded) {
+            if (!isFirstLoaded && !isInverse()) {
                 isFirstLoaded = true; // add first item
-                style.color = style.fillColor = config.colors.selected;
+                _style = Object.assign(_style, style("selected"));
             } else {
-                style.color = style.fillColor = config.colors.default;
+                _style = Object.assign(_style, style("default"));
             }
 
-            return style;
+            return _style;
         },
-        onEachFeature: _onEachFeature
+        onEachFeature: _onEachFeature,
+        pointToLayer: (point, latlng) => {
+            return L.circleMarker(latlng).setRadius(5);
+        }
     });
 
     _addBasemap(map);
     layer.addTo(map);
-    map.fitBounds(layer.getBounds());
+
+    isInverse()
+        ? map.fitBounds(layer.getBounds())
+        : map.fitBounds(_layers[0].getBounds(), {maxZoom: 5});
+
+    let answerControl = L.control.answer({onValidate: _checkAnswer, inverse: isInverse(), layers: _layers});
+    answerControl.addTo(map);
     answerControl.focus();
 
+    if (isInverse()) {
+        map.on("click", (e) => {
+            _controlProgress(resultControl, timerControl);
+        });
+    }
+
     L.DomEvent.on(L.DomUtil.get("bm-answer-input"), "keydown", (e) => {
-        _validate(e);
+        _validate(e, map);
         _controlProgress(resultControl, timerControl);
     });
 }
 
 
+/**
+ * Stores features in the global array.
+ * Attaches tooltips to features.
+ * Adds answer checks to features.
+ * @param  {object} feature
+ * @param  {object} layer
+ * @return {void}
+ */
 function _onEachFeature(feature, layer) {
     _layers.push(layer);
+    _addTooltip(feature, layer);
     _addFeatureCheck(feature, layer);
+
+    if (isInverse()) {
+        _highlight(feature, layer);
+        layer.on("click", _validate);
+    }
+}
+
+
+/**
+ * Returns style by its name.
+ * @param  {string} key
+ * @return {object}
+ */
+function style(key) {
+    return {
+        color: config.colors[key],
+        fillColor: config.colors[key]
+    };
+}
+
+
+/**
+ * Adds feature highlighting.
+ * @param  {object} feature
+ * @param  {object} layer
+ * @return {void}
+ */
+function _highlight(feature, layer) {
+    layer.on("mouseover", (e) => {
+        !_isDone(e) ? layer.setStyle(style("selected")) : null;
+    });
+
+    layer.on("mouseout", (e) => {
+        !_isDone(e) ? layer.setStyle(style("default")) : null;
+    });
+
+    function _isDone(e) {
+        return typeof e.target.feature.properties.done === "boolean";
+    }
+}
+
+
+/**
+ * Adds tooltip to map features.
+ * Tooltip is only shown once all the features were answered.
+ * @param {object} feature
+ * @param {object} layer
+ */
+function _addTooltip(feature, layer) {
+    let content = ["<ul>"];
+
+    for (let field of config.field) {
+        content.push(`<li>${field}: <strong>${feature.properties[field]}</strong></li>`);
+    }
+
+    content.push("</ul>");
+
+    layer.bindTooltip(content.join(""));
+    layer.off("click"); // keep tooltip hidden
+    layer.on("mouseover", (e) => {
+        if (_layers.length > 0) {
+            layer.closeTooltip();
+        }
+    });
 }
 
 
@@ -92,35 +230,30 @@ function _controlProgress(resultCtrl, timerCtrl) {
     }
 }
 
+
 /**
  * Provides mechanism to validate user input against the geoJSON properties
  * and act accordingly.
  * @param {object} feature
  * @param {object} layer
  */
-
-
-function _validate(e) {
-    if (e.keyCode !== 13 || !_layers[0]) {
+function _validate(e, map) {
+    if (!isInverse() && e.keyCode !== 13 || !_layers[0]) {
         return;
     }
 
-    let answer = e.target.value;
+    let answer = isInverse() ? e.target.feature.properties[config.field[0]] : e.target.value;
     let props = _layers[0].feature.properties;
-    let result = _checkAnswer(answer, _layers[0].feature);
+    let isRightAnswer = _checkAnswer(answer, _layers[0].feature);
 
-    _layers[0].setStyle({
-        color: result ? config.colors.right : config.colors.wrong,
-        fillColor: result ? config.colors.right : config.colors.wrong
-    });
+    _layers[0].setStyle(style(isRightAnswer ? "right" : "wrong"));
 
 
-    if (!props.retries || result) { // you ran out of retries
+    if (!props.retries || isRightAnswer) { // you ran out of retries
         props.done = true;
-
     }
 
-    if (!props.retries && !result) {
+    if (!props.retries && !isRightAnswer) {
         props.done = false;
     }
 
@@ -130,13 +263,14 @@ function _validate(e) {
         return;
     }
 
-    _layers[0].setStyle({
-            color: config.colors.selected,
-            fillColor: config.colors.selected
-        });
+    if (!isInverse()) {
+        _layers[0].setStyle(style("selected"));
+        map.flyToBounds(_layers[0].getBounds(), {maxZoom: 5});
+    }
 
     L.DomUtil.get("bm-answer-input").focus();
     L.DomUtil.get("bm-answer-input").value = "";
+    L.DomUtil.get("bm-answer-input").innerHTML =_layers[0].feature.properties[config.field[0]];
 }
 
 
@@ -144,6 +278,7 @@ function _addFeatureCheck(feature, layer) {
     feature.properties.retries = config.retriesPerItem;
     feature.properties.done = null;
 }
+
 
 /**
  * Checks the answer against the attribute value(s).
@@ -166,6 +301,7 @@ function _checkAnswer(value, feature) {
     return result;
 }
 
+
 /**
  * Decides whether to add basemap or not
  * @param {L.map} map
@@ -175,11 +311,13 @@ function _addBasemap(map) {
         return;
     }
 
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-            maxZoom: 18
+            maxZoom: 18,
+            opacity: _layers[0].getRadius() ? 0.2 : 1 // make map less opaque for point features
         }).addTo(map);
 }
+
 
 /**
  * Shuffles input data.
@@ -195,4 +333,13 @@ function _shuffle(array) {
     }
 
     return array;
+}
+
+
+/**
+ * Adds getBounds method to L.CircleMarker.
+ * @return {L.latLngBounds}
+ */
+L.CircleMarker.prototype.getBounds = function() {
+    return L.latLngBounds([this.getLatLng()], [this.getLatLng]);
 }

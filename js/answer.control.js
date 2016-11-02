@@ -9,9 +9,13 @@ L.Control.Answer = L.Control.extend({
 
     onAdd: function(map) {
         let container = L.DomUtil.create("div", "bm-answer");
-        this.input = L.DomUtil.create("input", "", container);
-        this.input.id = "bm-answer-input";
-        this.input.placeholder = "Type the name...";
+        this.answer = L.DomUtil.create(this.options.inverse ? "strong" : "input", "", container);
+        this.answer.id = "bm-answer-input";
+        this.answer.placeholder = "Type the name...";
+
+        if (this.options.inverse) {
+            this.answer.innerHTML = _layers[0].feature.properties[config.field[0]];
+        }
 
         L.DomEvent.disableClickPropagation(container);
         L.DomEvent.disableScrollPropagation(container);
@@ -20,7 +24,7 @@ L.Control.Answer = L.Control.extend({
     },
 
     focus: function() {
-        this.input.focus();
+        this.answer.focus();
     }
 });
 
