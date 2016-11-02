@@ -98,7 +98,7 @@ function init() {
 
     let layer = L.geoJSON(data, {
         style: (feature) => {
-            let style = {
+            let _style = {
                 fill: true,
                 fillOpacity: 0.3,
                 weight: 1
@@ -106,12 +106,12 @@ function init() {
 
             if (!isFirstLoaded && !isInverse()) {
                 isFirstLoaded = true; // add first item
-                style.color = style.fillColor = config.colors.selected;
+                _style = Object.assign(_style, style("selected"));
             } else {
-                style.color = style.fillColor = config.colors.default;
+                _style = Object.assign(_style, style("default"));
             }
 
-            return style;
+            return _style;
         },
         onEachFeature: _onEachFeature
     });
@@ -132,7 +132,6 @@ function init() {
             _controlProgress(resultControl, timerControl);
         });
     }
-
 
     L.DomEvent.on(L.DomUtil.get("bm-answer-input"), "keydown", (e) => {
         _validate(e, map);
@@ -155,7 +154,42 @@ function _onEachFeature(feature, layer) {
     _addFeatureCheck(feature, layer);
 
     if (isInverse()) {
+        _highlight(feature, layer);
         layer.on("click", _validate);
+    }
+}
+
+
+/**
+ * Returns style by its name.
+ * @param  {string} key
+ * @return {object}
+ */
+function style(key) {
+    return {
+        color: config.colors[key],
+        fillColor: config.colors[key]
+    };
+}
+
+
+/**
+ * Adds feature highlighting.
+ * @param  {object} feature
+ * @param  {object} layer
+ * @return {void}
+ */
+function _highlight(feature, layer) {
+    layer.on("mouseover", (e) => {
+        !_isDone(e) ? layer.setStyle(style("selected")) : null;
+    });
+
+    layer.on("mouseout", (e) => {
+        !_isDone(e) ? layer.setStyle(style("default")) : null;
+    });
+
+    function _isDone(e) {
+        return typeof e.target.feature.properties.done === "boolean";
     }
 }
 
@@ -208,15 +242,11 @@ function _validate(e, map) {
     let props = _layers[0].feature.properties;
     let isRightAnswer = _checkAnswer(answer, _layers[0].feature);
 
-    _layers[0].setStyle({
-        color: isRightAnswer ? config.colors.right : config.colors.wrong,
-        fillColor: isRightAnswer ? config.colors.right : config.colors.wrong
-    });
+    _layers[0].setStyle(style(isRightAnswer ? "right" : "wrong"));
 
 
     if (!props.retries || isRightAnswer) { // you ran out of retries
         props.done = true;
-
     }
 
     if (!props.retries && !isRightAnswer) {
@@ -230,14 +260,8 @@ function _validate(e, map) {
     }
 
     if (!isInverse()) {
-        _layers[0].setStyle({
-                color: config.colors.selected,
-                fillColor: config.colors.selected
-            });
-
-        map.flyToBounds(_layers[0].getBounds(), {
-            maxZoom: 5
-        });
+        _layers[0].setStyle(style("selected"));
+        map.flyToBounds(_layers[0].getBounds(), {maxZoom: 5});
     }
 
     L.DomUtil.get("bm-answer-input").focus();
