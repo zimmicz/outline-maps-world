@@ -1,51 +1,102 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>Blind maps by zimmicz</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <meta name="viewport" content="width=device-width">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Blind maps</h1>
-        <p>Learn yourself some geography</p>
+    <section class="page-header">
+      <h1 class="project-name">Blind maps</h1>
+      <h2 class="project-tagline">Learn yourself some geography</h2>
+      <a href="https://github.com/zimmicz/blind-maps" class="btn">View on GitHub</a>
+      <a href="https://github.com/zimmicz/blind-maps/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/zimmicz/blind-maps/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <p class="view"><a href="https://github.com/zimmicz/blind-maps">View the Project on GitHub <small>zimmicz/blind-maps</small></a></p>
+    <section class="main-content">
+      <h2>
+<a id="purpose" class="anchor" href="#purpose" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Purpose</h2>
 
+<p>When I went to school, we used to spend breaks standing in front of a map, trying to find places
+we've never been to. Since then, I guess I kind of like blind maps. They're great help for studying
+and they're fun as well.</p>
 
-        <ul>
-          <li><a href="https://github.com/zimmicz/blind-maps/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/zimmicz/blind-maps/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/zimmicz/blind-maps">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a id="blind-maps" class="anchor" href="#blind-maps" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Blind maps</h1>
+<p>That's why I made this simple project.</p>
 
-<p>A little project for educational purposes.</p>
+<h2>
+<a id="try-it-yourself" class="anchor" href="#try-it-yourself" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Try it yourself</h2>
 
-<p>Feel free to contribute by sending more data.</p>
+<p>Right now you can test your knowledge of the following parts of the world:</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Guess by name URL [1]</th>
+<th>Guess by feature URL [2]</th>
+<th>Datasource</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CONUS</td>
+<td><a href="https://www.zimmi.cz/blind-maps/usa/?inverse">https://www.zimmi.cz/blind-maps/usa/?inverse</a></td>
+<td><a href="https://www.zimmi.cz/blind-maps/usa/">https://www.zimmi.cz/blind-maps/usa/</a></td>
+<td><a href="http://www.naturalearthdata.com">Natural Earth</a></td>
+</tr>
+<tr>
+<td>Europe</td>
+<td><a href="https://www.zimmi.cz/blind-maps/europe/?inverse">https://www.zimmi.cz/blind-maps/europe/?inverse</a></td>
+<td><a href="https://www.zimmi.cz/blind-maps/europe/">https://www.zimmi.cz/blind-maps/europe/</a></td>
+<td><a href="http://www.naturalearthdata.com">Natural Earth</a></td>
+</tr>
+<tr>
+<td>World capitals</td>
+<td><a href="https://www.zimmi.cz/blind-maps/world-capitals/?inverse">https://www.zimmi.cz/blind-maps/world-capitals/?inverse</a></td>
+<td><a href="https://www.zimmi.cz/blind-maps/world-capitals/">https://www.zimmi.cz/blind-maps/world-capitals/</a></td>
+<td><a href="http://www.naturalearthdata.com">Natural Earth</a></td>
+</tr>
+</tbody>
+</table>
+
+<p>[1] Given a name, you try to find the right feature in the map</p>
+
+<p>[2] Given a feature (highlighted in the map), you try to fill in the right name</p>
+
+<h2>
+<a id="use-it" class="anchor" href="#use-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Use it</h2>
+
+<p>Feel free to use this little game whenever and wherever you feel it might be useful: at school, at home, giving a speech, whatever.</p>
 
 <h2>
 <a id="how-to-contribute" class="anchor" href="#how-to-contribute" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to contribute</h2>
 
-<p>Fork <code>gh-pages</code>, copy the <code>usa</code> folder to the new destination and provide new <code>data.js</code> file. Don't forget to prepend <code>let data =</code> to the file. Send pull request and wait for it to be merged.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/zimmicz">zimmicz</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+<ol>
+<li>Fork the repo.</li>
+<li>Run <code>yarn</code>.</li>
+<li>Checkout the <code>gh-pages</code> branch.</li>
+<li>I recommend copying <code>usa</code> folder to the new folder (name it after the piece of the world it represents)</li>
+<li>In that folder, replace the <code>data/data.js</code> file with your own <strong>GeoJSON</strong> EPSG:4326 file. Please consider simplifying the geometries, so the file is not bloated. Don't forget to prepend <code>let data =</code> before the GeoJSON itself.</li>
+<li>You'll find a config file at <code>js/config.js</code>. If you provide GeoJSON with <code>name</code> attribute (case-sensitive), no actions need to be taken. However, you can provide more than one attribute to check answers against in an array.</li>
+<li>Check that everything works fine.</li>
+<li>Update README.md.</li>
+<li>Send PR.</li>
+<li>Profit!</li>
+</ol>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/zimmicz/blind-maps">Blind maps</a> is maintained by <a href="https://github.com/zimmicz">zimmicz</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
+
+    </section>
+
+  
   </body>
 </html>
