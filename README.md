@@ -14,6 +14,7 @@ Right now you can test your knowledge of the following parts of the world:
 | CONUS  | https://www.zimmi.cz/blind-maps/usa/?inverse    | https://www.zimmi.cz/blind-maps/usa/    | [Natural Earth](http://www.naturalearthdata.com) |
 | Europe | https://www.zimmi.cz/blind-maps/europe/?inverse | https://www.zimmi.cz/blind-maps/europe/ | [Natural Earth](http://www.naturalearthdata.com) |
 | World capitals | https://www.zimmi.cz/blind-maps/world-capitals/?inverse | https://www.zimmi.cz/blind-maps/world-capitals/ | [Natural Earth](http://www.naturalearthdata.com) |
+| Africa | https://www.zimmi.cz/blind-maps/africa/?inverse | https://www.zimmi.cz/blind-maps/africa/ | [Natural Earth](http://www.naturalearthdata.com) |
 
 [1] Given a name, you try to find the right feature in the map
 
