@@ -14,7 +14,7 @@ L.Control.Answer = L.Control.extend({
         this.answer.placeholder = "Type the name...";
 
         if (this.options.inverse) {
-            this.answer.innerHTML = _layers[0].feature.properties[config.field[0]];
+            this.answer.innerHTML = _layers[0].feature.properties[CONFIG_COMMON.MAP_CONFIG().field[0]];
         }
 
         L.DomEvent.disableClickPropagation(container);

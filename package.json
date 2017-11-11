@@ -1,13 +1,13 @@
 {
   "dependencies": {
-    "leaflet": "^1.0.1",
+    "leaflet": "^1.2.0",
     "normalize.css": "^5.0.0"
   },
-  "name": "blind-maps",
+  "name": "outline-maps-world",
   "version": "1.0.0",
   "main": "index.js",
   "repository": {
-    "url": "https://github.com/zimmicz/blind-maps.git",
+    "url": "https://github.com/zimmicz/outline-maps-world.git",
     "type": "git"
   },
   "author": "Michal Zimmermann <zimmicz@gmail.com>",

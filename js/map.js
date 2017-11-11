@@ -1,6 +1,5 @@
 let _layers = [];
 
-
 loadData()
     .then(welcome)
     .then(init)
@@ -16,15 +15,15 @@ loadData()
 function loadData() {
     return new Promise((resolve, reject) => {
         let s = document.createElement("script");
-        s.setAttribute("src", config.path);
+        s.setAttribute("src", CONFIG_COMMON.MAP_CONFIG().path);
         s.setAttribute("async", true);
 
         s.addEventListener("load", function() {
-            resolve(`Data from ${config.path} loaded.`);
+            resolve(`Data from ${CONFIG_COMMON.MAP_CONFIG().path} loaded.`);
         });
 
         s.addEventListener("error", function() {
-            reject(`Data from ${config.path} failed to load.`);
+            reject(`Data from ${CONFIG_COMMON.MAP_CONFIG().path} failed to load.`);
         });
 
         document.body.appendChild(s);
@@ -88,7 +87,7 @@ function isInverse() {
 function init() {
     let map = L.map("map");
     let resultControl = L.control.result();
-    let timerControl = L.control.timer({position: config.timer.position});
+    let timerControl = L.control.timer({position: CONFIG_COMMON.timer.position});
 
     let isFirstLoaded = false;
 
@@ -171,8 +170,8 @@ function _onEachFeature(feature, layer) {
  */
 function style(key) {
     return {
-        color: config.colors[key],
-        fillColor: config.colors[key]
+        color: CONFIG_COMMON.colors[key],
+        fillColor: CONFIG_COMMON.colors[key]
     };
 }
 
@@ -207,7 +206,7 @@ function _highlight(feature, layer) {
 function _addTooltip(feature, layer) {
     let content = ["<ul>"];
 
-    for (let field of config.field) {
+    for (let field of CONFIG_COMMON.MAP_CONFIG().field) {
         content.push(`<li>${field}: <strong>${feature.properties[field]}</strong></li>`);
     }
 
@@ -242,18 +241,18 @@ function _validate(e, map) {
         return;
     }
 
-    let answer = isInverse() ? e.target.feature.properties[config.field[0]] : e.target.value;
+    let answer = isInverse() ? e.target.feature.properties[CONFIG_COMMON.MAP_CONFIG().field[0]] : e.target.value;
     let props = _layers[0].feature.properties;
     let isRightAnswer = _checkAnswer(answer, _layers[0].feature);
 
     _layers[0].setStyle(style(isRightAnswer ? "right" : "wrong"));
 
 
-    if (!props.retries || isRightAnswer) { // you ran out of retries
+    if (props.retries < 0 || isRightAnswer) { // you ran out of retries
         props.done = true;
     }
 
-    if (!props.retries && !isRightAnswer) {
+    if (props.retries < 0 && !isRightAnswer) {
         props.done = false;
     }
 
@@ -270,12 +269,12 @@ function _validate(e, map) {
 
     L.DomUtil.get("bm-answer-input").focus();
     L.DomUtil.get("bm-answer-input").value = "";
-    L.DomUtil.get("bm-answer-input").innerHTML =_layers[0].feature.properties[config.field[0]];
+    L.DomUtil.get("bm-answer-input").innerHTML =_layers[0].feature.properties[CONFIG_COMMON.MAP_CONFIG().field[0]];
 }
 
 
 function _addFeatureCheck(feature, layer) {
-    feature.properties.retries = config.retriesPerItem;
+    feature.properties.retries = CONFIG_COMMON.MAP_CONFIG().retriesPerItem;
     feature.properties.done = null;
 }
 
@@ -290,7 +289,7 @@ function _checkAnswer(value, feature) {
     let result = false;
     feature.properties.retries -= 1;
 
-    for (let attr of config.field) {
+    for (let attr of CONFIG_COMMON.MAP_CONFIG().field) {
         if (feature.properties[attr].toLowerCase().trim() !== value.toLowerCase().trim()) {
             continue;
         }
@@ -307,7 +306,7 @@ function _checkAnswer(value, feature) {
  * @param {L.map} map
  */
 function _addBasemap(map) {
-    if (!config.basemap) {
+    if (!CONFIG_COMMON.MAP_CONFIG().basemap) {
         return;
     }
 

@@ -1,16 +1,21 @@
-let config = {
-    path: "data.geojson",
-    field: ["name"], // attribute(s) to use for comparison
-    basemap: false,
-    retriesPerItem: 2, // set to -1 for infinity
-    colors: {
-        default: "#53777A",
-        right: "green",
-        wrong: "red",
-        selected: "yellow"
+const CONFIG_COMMON = {
+    "colors": {
+        "default": "#53777A",
+        "right": "green",
+        "wrong": "red",
+        "selected": "yellow"
     },
-    timer: {
-        position: "topright", // or false
-        timeout: 0 // milliseconds
+    "timer": {
+        "position": "topright", // or false
+        "timeout": 0 // milliseconds
+    }
+};
+
+const CONFIG = {
+    "usa": {
+        "path": "../data/usa.geojson",
+        "field": ["name"], // attribute(s) to use for comparison
+        "basemap": false,
+        "retriesPerItem": 2 // set to -1 for infinity
     }
 };
