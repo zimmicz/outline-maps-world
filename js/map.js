@@ -1,3 +1,5 @@
+"use strict";
+
 let _layers = [];
 
 loadData()
@@ -5,7 +7,24 @@ loadData()
     .then(init)
     .catch((err) => {
         console.log(err);
+        showHomepage();
     });
+
+
+function showHomepage() {
+    document.querySelector("#map").style.display = "none";
+    const table = document.querySelector("#list table");
+
+    for (let map of Object.entries(CONFIG)) {
+        let tr = document.createElement("tr");
+        let name = document.createElement("td");
+        name.innerHTML = map[1].name;
+        tr.appendChild(name);
+        tr.innerHTML += `<td><a href='/?inverse&map=${map[0]}'>Find by name</a></td>`
+        tr.innerHTML += `<td><a href='/?map=${map[0]}'>Find by feature</a></td>`
+        table.appendChild(tr);
+    }
+}
 
 
 /**
@@ -14,6 +33,9 @@ loadData()
  */
 function loadData() {
     return new Promise((resolve, reject) => {
+        if (!CONFIG_COMMON.MAP_CONFIG()) {
+            reject("Map config not found: defaulting to list of maps.");
+        }
         let s = document.createElement("script");
         s.setAttribute("src", CONFIG_COMMON.MAP_CONFIG().path);
         s.setAttribute("async", true);
@@ -38,6 +60,7 @@ function loadData() {
 function welcome() {
     return new Promise((resolve, reject) => {
         let welcome = document.getElementById("welcome");
+
         if (_getSettings()) {
             document.body.removeChild(welcome);
             resolve("Let's play!");
@@ -55,7 +78,7 @@ function welcome() {
 
 function _getSettings() {
     let storageKey = "remember" + (isInverse() ? "Inverse" : "");
-    return window.localStorage.getItem(storageKey);
+    return window.localStorage.getItem(storageKey) == "true";
 }
 
 
@@ -85,6 +108,8 @@ function isInverse() {
  * @return {void}
  */
 function init() {
+    document.querySelector("#list").style.display = "none";
+
     let map = L.map("map", {
         zoomSnap: 0.2
     });
@@ -99,10 +124,11 @@ function init() {
     data.features = _shuffle(data.features);
 
     let layer = L.geoJSON(data, {
+        attribution: CONFIG_COMMON.MAP_CONFIG().attribution,
         style: (feature) => {
             let _style = {
                 fill: true,
-                fillOpacity: 0.3,
+                fillOpacity: 0.4,
                 weight: 1
             };
 
@@ -312,11 +338,11 @@ function _addBasemap(map) {
         return;
     }
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-            maxZoom: 18,
-            opacity: _layers[0].getRadius() ? 0.2 : 1 // make map less opaque for point features
-        }).addTo(map);
+    const basemap = L.tileLayer(CONFIG_COMMON.basemap.url, {
+        attribution: CONFIG_COMMON.basemap.attribution
+    });
+
+    map.addLayer(basemap);
 }
 
 

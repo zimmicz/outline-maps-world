@@ -2,11 +2,46 @@ html,
 body {
     background: #bbb;
     color: #444;
-    height: 100%;
 }
 
 #map {
     height: 100%;
+}
+
+#list {
+    background: white;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    font-family: 'Roboto', sans-serif;
+    margin: auto;
+    padding-bottom: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    width: 80%;
+    max-width: 900px;
+}
+
+#list h1,
+#list h2 {
+    color: #53777A;
+    font-weight: normal;
+    padding-top: .5em;
+    text-transform: uppercase;
+}
+
+#list table {
+    width: 100%;
+}
+
+#list table tr {
+    line-height: 1.6em;
+}
+
+#list table tr:nth-child(even) {
+    background: #eee;
+}
+
+#list table a {
+    color: #53777A;
 }
 
 #welcome {
@@ -106,7 +141,6 @@ body {
 .leaflet-top.leaflet-right,
 #welcome div {
     background: #fff;
-    border-radius: 2px;
     display: inline-block;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     margin-top: 10px;
