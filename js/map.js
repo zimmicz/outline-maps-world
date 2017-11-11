@@ -85,7 +85,9 @@ function isInverse() {
  * @return {void}
  */
 function init() {
-    let map = L.map("map");
+    let map = L.map("map", {
+        zoomSnap: 0.2
+    });
     let resultControl = L.control.result();
     let timerControl = L.control.timer({position: CONFIG_COMMON.timer.position});
 

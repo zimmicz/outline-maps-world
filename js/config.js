@@ -19,16 +19,22 @@ const CONFIG_COMMON = {
 };
 
 const CONFIG = {
+    "africa": {
+        "path": "../data/africa.geojson",
+        "field": ["NAME", "NAME_LONG", "FORMAL_EN"],
+        "basemap": false,
+        "retriesPerItem": 0
+    },
     "usa": {
         "path": "../data/usa.geojson",
-        "field": ["name"], // attribute(s) to use for comparison
+        "field": ["name"],
         "basemap": false,
-        "retriesPerItem": 0 // set to -1 for infinity
+        "retriesPerItem": 0
     },
     "world-capitals": {
         "path": "../data/world_capitals.geojson",
-        "field": ["name"], // attribute(s) to use for comparison
+        "field": ["name"],
         "basemap": true,
-        "retriesPerItem": 0 // set to -1 for infinity
+        "retriesPerItem": 0
     }
 };
