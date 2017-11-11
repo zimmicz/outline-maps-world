@@ -6,7 +6,7 @@ L.Control.Result = L.Control.extend({
     initialize: function(options) {
         L.setOptions(this, options);
         this.result = {
-            todo: data.features.length,
+            todo: GEOJSON_DATA.features.length,
             done: 0,
             right: 0,
             wrong: 0
@@ -30,13 +30,13 @@ L.Control.Result = L.Control.extend({
      */
     showProgress: function() {
         this.result = {
-            todo: data.features.length,
+            todo: GEOJSON_DATA.features.length,
             done: 0,
             right: 0,
             wrong: 0
         };
 
-        data.features.forEach((item) => {
+        GEOJSON_DATA.features.forEach((item) => {
             if (item.properties.done) {
                 this.result.done += 1;
                 this.result.todo -= 1;

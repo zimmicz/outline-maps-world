@@ -1,6 +1,7 @@
 "use strict";
 
 let _layers = [];
+let GEOJSON_DATA;
 
 loadData()
     .then(welcome)
@@ -36,19 +37,15 @@ function loadData() {
         if (!CONFIG_COMMON.MAP_CONFIG()) {
             reject("Map config not found: defaulting to list of maps.");
         }
-        let s = document.createElement("script");
-        s.setAttribute("src", CONFIG_COMMON.MAP_CONFIG().path);
-        s.setAttribute("async", true);
-
-        s.addEventListener("load", function() {
-            resolve(`Data from ${CONFIG_COMMON.MAP_CONFIG().path} loaded.`);
-        });
-
-        s.addEventListener("error", function() {
-            reject(`Data from ${CONFIG_COMMON.MAP_CONFIG().path} failed to load.`);
-        });
-
-        document.body.appendChild(s);
+        fetch(CONFIG_COMMON.MAP_CONFIG().path)
+            .then((data) => {
+                return data.json();
+            }).then((data) => {
+                GEOJSON_DATA = data;
+                resolve(GEOJSON_DATA);
+            }).catch((err) => {
+                console.error(err);
+            })
     });
 }
 
@@ -120,9 +117,9 @@ function init() {
     timerControl.addTo(map);
     resultControl.addTo(map);
 
-    data.features = _shuffle(data.features);
+    GEOJSON_DATA.features = _shuffle(GEOJSON_DATA.features);
 
-    let layer = L.geoJSON(data, {
+    let layer = L.geoJSON(GEOJSON_DATA, {
         attribution: CONFIG_COMMON.MAP_CONFIG().attribution,
         style: (feature) => {
             let _style = {
