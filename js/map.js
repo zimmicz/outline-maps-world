@@ -59,6 +59,7 @@ function loadData() {
  */
 function welcome() {
     return new Promise((resolve, reject) => {
+        document.querySelector("#list").style.display = "none";
         let welcome = document.getElementById("welcome");
 
         if (_getSettings()) {
@@ -108,8 +109,6 @@ function isInverse() {
  * @return {void}
  */
 function init() {
-    document.querySelector("#list").style.display = "none";
-
     let map = L.map("map", {
         zoomSnap: 0.2
     });

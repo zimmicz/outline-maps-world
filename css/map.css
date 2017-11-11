@@ -2,6 +2,7 @@ html,
 body {
     background: #bbb;
     color: #444;
+    font-family: 'Roboto', sans-serif;
 }
 
 #map {
@@ -11,7 +12,6 @@ body {
 #list {
     background: white;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-    font-family: 'Roboto', sans-serif;
     margin: auto;
     padding-bottom: 1em;
     padding-left: 1em;
@@ -20,8 +20,8 @@ body {
     max-width: 900px;
 }
 
-#list h1,
-#list h2 {
+h1,
+h2 {
     color: #53777A;
     font-weight: normal;
     padding-top: .5em;
@@ -67,6 +67,7 @@ body {
     color: #53777A;
     font-weight: normal;
     padding-bottom: 5px;
+    padding-top: 0;
 }
 
 #welcome div p,
