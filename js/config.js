@@ -39,6 +39,14 @@ const CONFIG = {
         "retriesPerItem": 0,
         "attribution": "Made with Natural Earth."
     },
+    "south-america": {
+        "name": "South America",
+        "path": "../data/south_america.geojson",
+        "field": ["NAME", "NAME_LONG", "FORMAL_EN"],
+        "basemap": false,
+        "retriesPerItem": 0,
+        "attribution": "Made with Natural Earth."
+    },
     "usa": {
         "name": "United States of America",
         "path": "../data/usa.geojson",
