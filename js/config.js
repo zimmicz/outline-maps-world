@@ -66,7 +66,7 @@ const CONFIG = {
     "comarques_catalunya": {
         "name": "Comarques de Catalunya",
         "path": "../data/comarques_catalunya.geojson",
-        "field": ["nom_comar"],
+        "field": ["nom_comar", "cap_comar"],
         "basemap": true,
         "retriesPerItem": 0,
         "attribution": "ICGC"
