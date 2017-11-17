@@ -14,5 +14,6 @@ Every map is available at https://outline-maps.world/?map=mapName, where `mapNam
 1. Fork the repo.
 2. Add a new dataset to `data` folder named by the piece of Earth it represents (e.g. `usa.geojson`).
 3. Add it to `js/config.js`.
-4. Send PR.
-5. Profit!
+4. Test your code. `cd` to the repo folder, run `python -m SimpleHTTPServer` and go to [http://localhost:8000](http://localhost:8000) to see everything was smooth.
+5. Send PR.
+6. Profit!
