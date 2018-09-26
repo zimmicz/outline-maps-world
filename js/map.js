@@ -314,7 +314,7 @@ function _checkAnswer(value, feature) {
     feature.properties.retries -= 1;
 
     for (let attr of CONFIG_COMMON.MAP_CONFIG().field) {
-        if (feature.properties[attr].toLowerCase().trim() !== value.toLowerCase().trim()) {
+        if (feature.properties[attr] === null || feature.properties[attr].toLowerCase().trim() !== value.toLowerCase().trim()) {
             continue;
         }
 
