@@ -63,6 +63,14 @@ const CONFIG = {
         "retriesPerItem": 0,
         "attribution": "Made with Natural Earth."
     },
+    "european-capitals": {
+        "name": "European Capitals",
+        "path": "../data/european_capitals.geojson",
+        "field": ["name", ["namealt"]],
+        "basemap": true,
+        "retriesPerItem": 0,
+        "attribution": "Made with Natural Earth."
+    },
     "comarques_catalunya": {
         "name": "Comarques de Catalunya",
         "path": "../data/comarques_catalunya.geojson",
