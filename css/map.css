@@ -22,7 +22,7 @@ body {
 
 h1,
 h2 {
-    color: #53777A;
+    color: #D1495B;
     font-weight: normal;
     padding-top: .5em;
     text-transform: uppercase;
@@ -40,8 +40,8 @@ h2 {
     background: #eee;
 }
 
-#list table a {
-    color: #53777A;
+a {
+    color: #D1495B;
 }
 
 #welcome {
