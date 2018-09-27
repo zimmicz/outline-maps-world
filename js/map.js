@@ -16,7 +16,7 @@ function showHomepage() {
     document.querySelector("#map").style.display = "none";
     const table = document.querySelector("#list table");
 
-    for (let map of Object.entries(CONFIG)) {
+    for (let map of Object.entries(CONFIG).sort()) {
         let tr = document.createElement("tr");
         let name = document.createElement("td");
         name.innerHTML = map[1].name;
