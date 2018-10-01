@@ -101,7 +101,8 @@ a {
 
 .bm-timer,
 .bm-result,
-.bm-answer {
+.bm-answer,
+.bm-map-request {
     background: white;
     text-align: center;
     width: 200px;

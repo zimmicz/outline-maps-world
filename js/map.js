@@ -111,9 +111,11 @@ function init() {
     });
     let resultControl = L.control.result();
     let timerControl = L.control.timer({position: CONFIG_COMMON.timer.position});
+    let mapRequestControl = L.control.mapRequest();
 
     let isFirstLoaded = false;
 
+    mapRequestControl.addTo(map);
     timerControl.addTo(map);
     resultControl.addTo(map);
 
