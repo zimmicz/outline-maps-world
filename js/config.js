@@ -78,5 +78,14 @@ const CONFIG = {
         "basemap": true,
         "retriesPerItem": 0,
         "attribution": "ICGC"
+    },
+    "asia": {
+        "name": "Asia",
+        "path": "../data/asia.geojson",
+        "field": ["NAME", "NAME_LONG", "FORMAL_EN"],
+        "basemap": false,
+        "retriesPerItem": 0,
+        "attribution": "Made with Natural Earth."
     }
 };
+
