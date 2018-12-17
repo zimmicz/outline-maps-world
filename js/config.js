@@ -86,6 +86,14 @@ const CONFIG = {
         "basemap": false,
         "retriesPerItem": 0,
         "attribution": "Made with Natural Earth."
+    },
+    "indian-states": {
+        "name": "Indian States",
+        "path": "../data/indian_states.geojson",
+        "field": ["name", "name_alt", "name_local"],
+        "basemap": false,
+        "retriesPerItem": 0,
+        "attribution": "Made with Natural Earth."
     }
 };
 
