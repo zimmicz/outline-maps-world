@@ -94,6 +94,14 @@ const CONFIG = {
         "basemap": false,
         "retriesPerItem": 0,
         "attribution": "Made with Natural Earth."
+    },
+    "indian-cities": {
+        "name": "Indian Cities",
+        "path": "../data/indian_cities.geojson",
+        "field": ["name", "meganame", "ls_name"],
+        "basemap": true,
+        "retriesPerItem": 0,
+        "attribution": "Made with Natural Earth."
     }
 };
 
