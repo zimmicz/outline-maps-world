@@ -13,6 +13,7 @@ body {
     background: white;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     margin: auto;
+    margin-bottom: 2rem;
     padding-bottom: 1em;
     padding-left: 1em;
     padding-right: 1em;
