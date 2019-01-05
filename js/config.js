@@ -110,6 +110,14 @@ const CONFIG = {
         "basemap": false,
         "retriesPerItem": 0,
         "attribution": "Made with Natural Earth."
+    },
+    "latin-america": {
+        "name": "Latin America",
+        "path": "../data/latin_america.geojson",
+        "field": ["NAME", "NAME_LONG", "FORMAL_EN"],
+        "basemap": false,
+        "retriesPerItem": 0,
+        "attribution": "Made with Natural Earth."
     }
 };
 
