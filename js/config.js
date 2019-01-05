@@ -66,7 +66,7 @@ const CONFIG = {
     "european-capitals": {
         "name": "European Capitals",
         "path": "../data/european_capitals.geojson",
-        "field": ["name", ["namealt"]],
+        "field": ["name", "namealt"],
         "basemap": true,
         "retriesPerItem": 0,
         "attribution": "Made with Natural Earth."
@@ -100,6 +100,14 @@ const CONFIG = {
         "path": "../data/indian_cities.geojson",
         "field": ["name", "meganame", "ls_name"],
         "basemap": true,
+        "retriesPerItem": 0,
+        "attribution": "Made with Natural Earth."
+    },
+    "oceania": {
+        "name": "Oceania",
+        "path": "../data/oceania.geojson",
+        "field": ["NAME", "NAME_LONG", "FORMAL_EN"],
+        "basemap": false,
         "retriesPerItem": 0,
         "attribution": "Made with Natural Earth."
     }
